@@ -2,6 +2,9 @@ import json
 import re
 from openai import OpenAI
 
+from configuration.config import MSDSConfig
+config = MSDSConfig()
+
 def get_inp_format(inp_list):    
     """
     to check whether given input is chemical name or CAS Numbers
@@ -52,48 +55,11 @@ def get_json_from_gpt(inp_list):
     client = OpenAI()
 
     response = client.chat.completions.create(
-      model="gpt-3.5-turbo-1106",
-      temperature=0,
+      model=config.MODEL_NAME,
+      temperature=config.MODEL_TEMP,
       response_format={ "type": "json_object" },
       messages=[
-        {"role": "system", "content": """You are a helpful assistant designed to output JSON.
-        The structure of json should be as follows:
-      {"Basic Information": {
-        "Chemical formula":"",
-        "Molecular weight":""
-        },
-      "Physical Properties": {
-        "Appearance":"",
-        "Specific Gravity @ 20°C/4°C":"",
-        "Boiling Point (0°C)":"",
-        "Melting/Freezing Point (0°C)":""
-        },
-      "Hazard related information": {
-        "Eyes":"",
-        "Skin":"",
-        "Inhalation":"",
-        "Ingestion":""
-        },
-      "Personal protection":"",
-      "Handling information": {
-        "Handling":"",
-        "Storage":""
-        },
-      "Solubility":"",
-      "Any other relavant information":"",
-      "First aid measures":{
-        "Eyes":"",
-        "skin":"",
-        "Ingestion":"",
-        "Inhalation":""
-        },
-      "Flash point, degree C":"",
-      "Fire-fighting measures":"",
-      "IMDG code":"",
-      "CAS Number":"",
-      "UN number":"",
-      "Transport hazard":""
-      }"""},
+        {"role": "system", "content": f"""{config.GPT_PROMPT}"""},
         {"role": "user", "content": prompt}
       ]
     )

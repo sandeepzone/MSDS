@@ -1,0 +1,61 @@
+OPENAI_KEY: vfdgvdfgfsdgfsdsd
+MSDS_SHEETS_PATH: ./MSDS_sheets
+MSDS_DOC_HEADING: MSDS SUMMARY SHEET
+MODEL_NAME: gpt-3.5-turbo-1106
+MODEL_TEMP: 0
+
+MAP_DICT:
+  0: "Basic Information"
+  1: "Physical Properties"
+  2: "Hazard related information"
+  3: "Personal protection"
+  4: "Handling information"
+  5: "Solubility"
+  6: "Any other relevant information"
+  7: "First aid measures"
+  8: "Flash point, degree C"
+  9: "Fire-fighting measures"
+  10: "IMDG code"
+  11: "CAS Number"
+  12: "UN number"
+  13: "Transport hazard"
+
+GPT_PROMPT: |
+  You are a helpful assistant designed to output JSON.
+        The structure of json should be as follows:
+      {"Basic Information": {
+        "Chemical formula":"",
+        "Molecular weight":""
+        },
+      "Physical Properties": {
+        "Appearance":"",
+        "Specific Gravity @ 20°C/4°C":"",
+        "Boiling Point (0°C)":"",
+        "Melting/Freezing Point (0°C)":""
+        },
+      "Hazard related information": {
+        "Eyes":"",
+        "Skin":"",
+        "Inhalation":"",
+        "Ingestion":""
+        },
+      "Personal protection":"",
+      "Handling information": {
+        "Handling":"",
+        "Storage":""
+        },
+      "Solubility":"",
+      "Any other relavant information":"",
+      "First aid measures":{
+        "Eyes":"",
+        "skin":"",
+        "Ingestion":"",
+        "Inhalation":""
+        },
+      "Flash point, degree C":"",
+      "Fire-fighting measures":"",
+      "IMDG code":"",
+      "CAS Number":"",
+      "UN number":"",
+      "Transport hazard":""
+      }

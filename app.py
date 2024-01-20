@@ -5,17 +5,17 @@ from flask import jsonify
 import json
 import logging.config
 import os
-from gpt import get_json_from_gpt
-from doc_format import save_doc
-from dotenv import load_dotenv
-load_dotenv()
+from models.gpt import get_json_from_gpt
+from utils.doc_format import save_doc
+
+from configuration.config import MSDSConfig
+config = MSDSConfig()
 
 logging.config.fileConfig("./logging.conf")
 
 app = Flask(__name__)
-
 @app.route('/MSDS/healthCheck', methods=['GET', 'POST'], strict_slashes = False)
-def checkHealth():
+def checkHealth(): 
 
     """HEALTHCHECKER
     
@@ -39,15 +39,20 @@ def generate_summary():
     try:
         input_list = request.json['MSDS_input']
         logging.info("The input received for MSDS summary generation is : {}".format(input_list))
+        
         json_obj = get_json_from_gpt(input_list)
-        logging.info("received MSDS info from gpt successfully")
+        logging.info("Received MSDS info from gpt successfully")
+        
         output_name = "_".join(input_list)
-        logging.info("output name is {}".format(output_name))
-        dest_path = os.path.join("../MSDS_sheets", output_name + ".docx")
+        logging.info("Output name is {}".format(output_name))
+        
+        dest_path = os.path.join(config.MSDS_SHEETS_PATH, output_name + ".docx")
         doc = save_doc(json_obj, dest_path)
         result = {"status": 200, "message": "Successfully completed"}
+        
         logging.info("Successfully generated and saved the MSDS for given input")
         return json.dumps(result)
+    
     except Exception as error:
         logging.error(str(error))
         result = {"status": 400, "message": "An error occured while processing request"}
