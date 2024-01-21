@@ -8,8 +8,9 @@ import os
 from models.gpt import get_json_from_gpt
 from utils.doc_format import save_doc
 
-from configuration.config import MSDSConfig
-config = MSDSConfig()
+from configuration.msds_config import MSDSConfig
+config: MSDSConfig = MSDSConfig()
+config.load("./configuration/msds_config.yml")
 
 logging.config.fileConfig("./logging.conf")
 

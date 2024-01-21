@@ -1,13 +1,13 @@
-OPENAI_KEY: vfdgvdfgfsdgfsdsd
-MSDS_SHEETS_PATH: ./MSDS_sheets
-MSDS_DOC_HEADING: MSDS SUMMARY SHEET
-MODEL_NAME: gpt-3.5-turbo-1106
+OPENAI_KEY: "*******"
+MSDS_SHEETS_PATH: "./MSDS_sheets"
+MSDS_DOC_HEADING: "MSDS SUMMARY SHEET"
+MODEL_NAME: "gpt-3.5-turbo-1106"
 MODEL_TEMP: 0
 
 MAP_DICT:
   0: "Basic Information"
   1: "Physical Properties"
-  2: "Hazard related information"
+  2: "Hazard related informat,ion"
   3: "Personal protection"
   4: "Handling information"
   5: "Solubility"

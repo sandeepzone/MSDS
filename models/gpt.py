@@ -2,8 +2,9 @@ import json
 import re
 from openai import OpenAI
 
-from configuration.config import MSDSConfig
-config = MSDSConfig()
+from configuration.msds_config import MSDSConfig
+config: MSDSConfig = MSDSConfig()
+config.load("configuration/msds_config.yml")
 
 def get_inp_format(inp_list):    
     """
@@ -52,7 +53,7 @@ def get_json_from_gpt(inp_list):
         prompt = prompt.format(chemicals=inp_list)
 
     
-    client = OpenAI()
+    client = OpenAI(api_key=config.OPENAI_KEY)
 
     response = client.chat.completions.create(
       model=config.MODEL_NAME,

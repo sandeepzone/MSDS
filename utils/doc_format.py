@@ -5,8 +5,9 @@ from docx.enum.text import WD_ALIGN_PARAGRAPH
 from docx.shared import Pt
 from docx.enum.text import WD_LINE_SPACING
 
-from configuration.config import MSDSConfig
-config = MSDSConfig()
+from configuration.msds_config import MSDSConfig
+config: MSDSConfig = MSDSConfig()
+config.load("configuration/msds_config.yml")
 
 def save_doc(res, dest_path):
     # JSON data as provided
@@ -56,13 +57,6 @@ def save_doc(res, dest_path):
         header_cells[idx].text = chem
 
     # Add rows for each section and property
-    """
-    map_dict = {0:"Basic Information",1:"Physical Properties",2:"Hazard related information",
-               3:"Personal protection",4:"Handling information",5:"Solubility",
-               6:"Any other relavant information",7:"First aid measures",
-               8:"Flash point, degree C",9:"Fire-fighting measures",
-               10:"IMDG code",11:"CAS Number",12:"UN number",13:"Transport hazard"}
-    """
     map_dict = config.MAP_DICT
     i=0
 #     sub_headers = ["a)","b)","c)","d)","e)","f)"]
