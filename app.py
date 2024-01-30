@@ -1,66 +1,81 @@
 import warnings
 warnings.filterwarnings("ignore", category=DeprecationWarning)
-from flask import Flask, request, g, abort
-from flask import jsonify
+
+from fastapi import FastAPI
+from starlette.exceptions import HTTPException as StarletteHTTPException
+from starlette.requests import Request
+from fastapi.responses import JSONResponse, PlainTextResponse
 import json
 import logging.config
 import os
-from models.gpt import get_json_from_gpt
-from utils.doc_format import save_doc
-
 from configuration.msds_config import MSDSConfig
+from data.domain.prediction_domain import MSDSRequest, MSDSResponse
+from exception.service_exception import ServiceException
+from exception.exception_handler import ServiceExceptionHandler
+from exception.service_exception import  OpenAiRateLimitError,  \
+                OpenAiAuthenticationError, OpenAIError, OpenAiTimeoutError
+from service.gpt_service import GptService
+
+# Configuration and Logging
 config: MSDSConfig = MSDSConfig()
 config.load("./configuration/msds_config.yml")
-
 logging.config.fileConfig("./logging.conf")
 
-app = Flask(__name__)
-@app.route('/MSDS/healthCheck', methods=['GET', 'POST'], strict_slashes = False)
-def checkHealth(): 
+# FastAPI app instance
+app = FastAPI()
+exception_handler = ServiceExceptionHandler()
 
+@app.get('/MSDS/healthCheck')
+def check_health(): 
     """HEALTHCHECKER
     
     This API would be polled to check the response of the server(bot) that is running..
     """
-    return(jsonify({'status' : 'MSDS Server is running...'}), 200)
+    return JSONResponse(content={'status': 'Healthy'}, status_code=200)
 
-
-@app.route('/MSDS/generate', methods=['GET', 'POST'], strict_slashes = False)
-def generate_summary():
+@app.post('/MSDS/generate', status_code=200)
+def generate_summary(request: MSDSRequest):
     """
-    generate_summary method returns the MSDS shhet for the given input list
-    Parameters
-    ----------
-    text : String or list of strings representing chemical names or CAS Numbers.
-    Returns
-    -------
-    JSON: Returns the success status upon successful generation of MSDS sheet.
+    generate_summary method returns the MSDS sheet for the given input list
+    ...
     """
-
+    
     try:
-        input_list = request.json['MSDS_input']
+        input_list = request.MSDS_input
         logging.info("The input received for MSDS summary generation is : {}".format(input_list))
         
-        json_obj = get_json_from_gpt(input_list)
-        logging.info("Received MSDS info from gpt successfully")
-        
-        output_name = "_".join(input_list)
-        logging.info("Output name is {}".format(output_name))
-        
-        dest_path = os.path.join(config.MSDS_SHEETS_PATH, output_name + ".docx")
-        doc = save_doc(json_obj, dest_path)
-        result = {"status": 200, "message": "Successfully completed"}
+        gpt_service = GptService(config=config) 
+        gpt_service.generate_document(input_list)
+        result = MSDSResponse()
         
         logging.info("Successfully generated and saved the MSDS for given input")
-        return json.dumps(result)
+        return result
     
-    except Exception as error:
-        logging.error(str(error))
-        result = {"status": 400, "message": "An error occured while processing request"}
-        return json.dumps(result)
-    
+    except ServiceException as s:
+        logging.error(str(s))
+        exception_handler.handle_service_exception(s)
+    except Exception as e:
+        logging.error(str(e))
+        exception_handler.handle_exception(e)
+
+# exception handler for StarletteHTTPException exceptions
+@app.exception_handler(StarletteHTTPException)
+async def http_exception_handler(request: Request, exec):
+    # error message with the status code and detail from the exception
+    message = {"status": "FAILED", "status_detail": exec.detail, "code": str(exec.status_code)}
+    # error message as a plain text response with the appropriate status code
+    return PlainTextResponse(content=json.dumps(message, indent=2), status_code=exec.status_code) 
+
+@app.exception_handler(Exception)
+async def generic_exception_handler(request: Request, exec):
+    if isinstance(exec,(OpenAiRateLimitError, OpenAiAuthenticationError, OpenAIError, OpenAiTimeoutError)):
+        message = {
+            "status": "FAILED",
+            "status_detail": exec.detail,
+            "code": str(exec.status_code)
+        }
+        return PlainTextResponse(content=json.dumps(message, indent=2), status_code=exec.status_code)
 
 if __name__ == '__main__':
-    app.run(host="0.0.0.0",
-            port= 8000,
-            debug=False)
+    import uvicorn
+    uvicorn.run(app, host="0.0.0.0", port=8080)

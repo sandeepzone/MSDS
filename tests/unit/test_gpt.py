@@ -9,7 +9,7 @@ def mock_openai_response():
     response.choices[0].message.content = '{"H2O": "Water"}'  # Example response
     return response
 
-@patch('models.gpt.OpenAI')
+@patch('models.gpt_serviceOpenAI')
 def test_get_json_from_gpt(mock_openai, mock_openai_response):
     mock_openai.return_value.chat.completions.create.return_value = mock_openai_response
 

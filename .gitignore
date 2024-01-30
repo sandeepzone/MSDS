@@ -2,6 +2,6 @@ __pycache__
 .vscode
 .docx
 .pytest_cache
-logs/*.log
-MSDS_sheets/*.docx
+data/logs/*.log
+data/MSDS_sheets/*.docx
 .DS_Store
