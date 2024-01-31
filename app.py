@@ -19,7 +19,7 @@ from service.gpt_service import GptService
 # Configuration and Logging
 config: MSDSConfig = MSDSConfig()
 config.load("./configuration/msds_config.yml")
-logging.config.fileConfig("./logging.conf")
+logging.config.fileConfig("./configuration/logging.conf")
 
 # FastAPI app instance
 app = FastAPI()

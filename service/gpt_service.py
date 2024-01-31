@@ -20,6 +20,7 @@ class GptService:
             return 'CAS Number'
         elif re.match(chemical_name_pattern, input_chemical_list):
             return 'Chemical Name'
+        #TODO How to deal with else cases if any? Raise error? 
 
     def get_json_from_gpt(self, input_chemical_list):
         inp_type = self.get_input_format(input_chemical_list[0])
