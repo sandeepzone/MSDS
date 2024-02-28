@@ -3,6 +3,7 @@ from typing import List, Optional
 
 class MSDSRequest(BaseModel):
     MSDS_input: List[str]
+    #TODO: Add input validator and raise exception 
 
 
 class MSDSResponse(BaseModel):

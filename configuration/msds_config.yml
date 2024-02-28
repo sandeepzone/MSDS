@@ -1,8 +1,11 @@
-OPENAI_KEY: "*******"
+OPENAI_KEY: "********"
+OPENAI_ENDPOINT: "https://apsl-ai.openai.azure.com/"
+OPENAI_API_VERSION: "2023-05-15"
+OPENAI_SEED: 123
 MSDS_SHEETS_PATH: "./data/MSDS_sheets"
 MSDS_DOC_HEADING: "MSDS SUMMARY SHEET"
-MODEL_NAME: "gpt-3.5-turbo-1106"
-MODEL_TEMP: 0
+MODEL_NAME: "Tech-transfer-GPT-4"
+MODEL_TEMP: 0.001
 
 MAP_DICT:
   0: "Basic Information"
@@ -20,42 +23,3 @@ MAP_DICT:
   12: "UN number"
   13: "Transport hazard"
 
-GPT_PROMPT: |
-  You are a helpful assistant designed to output JSON.
-        The structure of json should be as follows:
-      {"Basic Information": {
-        "Chemical formula":"",
-        "Molecular weight":""
-        },
-      "Physical Properties": {
-        "Appearance":"",
-        "Specific Gravity @ 20°C/4°C":"",
-        "Boiling Point (0°C)":"",
-        "Melting/Freezing Point (0°C)":""
-        },
-      "Hazard related information": {
-        "Eyes":"",
-        "Skin":"",
-        "Inhalation":"",
-        "Ingestion":""
-        },
-      "Personal protection":"",
-      "Handling information": {
-        "Handling":"",
-        "Storage":""
-        },
-      "Solubility":"",
-      "Any other relavant information":"",
-      "First aid measures":{
-        "Eyes":"",
-        "skin":"",
-        "Ingestion":"",
-        "Inhalation":""
-        },
-      "Flash point, degree C":"",
-      "Fire-fighting measures":"",
-      "IMDG code":"",
-      "CAS Number":"",
-      "UN number":"",
-      "Transport hazard":""
-      }

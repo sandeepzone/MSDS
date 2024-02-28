@@ -1,30 +1,42 @@
+# Running Application in docker
 
-```
-MSDS
-├─ Dockerfile
-├─ MSDS_summary.log
-├─ app.py
-├─ configuration
-│  ├─ msds_config.py
-│  └─ msds_config.yml
-├─ data
-│  ├─ MSDS_sheets
-│  │  └─ .gitkeep
-│  ├─ domain
-│  │  └─ prediction_domain.py
-│  └─ logs
-│     ├─ .gitkeep
-│     └─ MSDS_summary.log
-├─ environment.yml
-├─ exception
-│  ├─ exception_handler.py
-│  └─ service_exception.py
-├─ logging.conf
-├─ models
-│  └─ gpt_servicepy
-├─ requirements.txt
-├─ tests
-│  └─ unit
-│     └─ test_gpt_servicepy
-└─ utils
-   └─ doc_format.py
+1. To build docker image from the code base : docker build -t MSDS .
+(MSDS will be the image name)
+2. To run this image as a docker container : docker run -p 6001:6001 MSDS
+3. This command will initialize a docker container in the machine you are running on port 6001
+
+# POST URL to generate MSDS Sheet: http://{hostname}:6001/MSDS/generate
+# GET URL to check health of API: http://{hostname}:6001/MSDS/healthCheck
+
+# Expected  Request body:
+
+1. Input containing only chemicals:
+   {
+      "MSDS_input":["Morpholine", "Benzene"]
+   }
+
+2. Input containing mix of chemical name and CAS number:
+   {
+      "MSDS_input":["Morpholine", "7732-18-5"]
+   }
+
+3. Input containing only CAS numbers:
+   {
+      "MSDS_input":["110-91-8", "7732-18-5"]
+   }
+# Expected successfull response body:
+   {
+      "status": "SUCCESS",
+      "status_detail": "SUCCESS",
+      "code": "200"
+   }
+
+# Expected healthCheck response body:
+
+   {
+      "status": "Healthy"
+   }
+
+
+# Results will be shared in the path: ./data/MSDS_sheets/*.docx 
+# Logs will be generated at: ./data/logs/MSDS_summary.log

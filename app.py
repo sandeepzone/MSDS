@@ -13,9 +13,10 @@ from data.domain.prediction_domain import MSDSRequest, MSDSResponse
 from exception.service_exception import ServiceException
 from exception.exception_handler import ServiceExceptionHandler
 from exception.service_exception import  OpenAiRateLimitError,  \
-                OpenAiAuthenticationError, OpenAIError, OpenAiTimeoutError
+                OpenAiAuthenticationError, OpenAIError, OpenAiTimeoutError, InvalidInput, InvalidRequest
 from service.gpt_service import GptService
 
+#TODO: Restructure code base
 # Configuration and Logging
 config: MSDSConfig = MSDSConfig()
 config.load("./configuration/msds_config.yml")
@@ -44,8 +45,8 @@ def generate_summary(request: MSDSRequest):
         input_list = request.MSDS_input
         logging.info("The input received for MSDS summary generation is : {}".format(input_list))
         
-        gpt_service = GptService(config=config) 
-        gpt_service.generate_document(input_list)
+        gpt_service = GptService(config=config, user_input_list=input_list) 
+        gpt_service.generate_document()
         result = MSDSResponse()
         
         logging.info("Successfully generated and saved the MSDS for given input")
@@ -68,14 +69,10 @@ async def http_exception_handler(request: Request, exec):
 
 @app.exception_handler(Exception)
 async def generic_exception_handler(request: Request, exec):
-    if isinstance(exec,(OpenAiRateLimitError, OpenAiAuthenticationError, OpenAIError, OpenAiTimeoutError)):
+    if isinstance(exec,(OpenAiRateLimitError, OpenAiAuthenticationError, OpenAIError, OpenAiTimeoutError, InvalidInput, InvalidRequest)):
         message = {
             "status": "FAILED",
             "status_detail": exec.detail,
             "code": str(exec.status_code)
         }
         return PlainTextResponse(content=json.dumps(message, indent=2), status_code=exec.status_code)
-
-if __name__ == '__main__':
-    import uvicorn
-    uvicorn.run(app, host="0.0.0.0", port=8080)

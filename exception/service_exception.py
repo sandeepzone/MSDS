@@ -36,6 +36,14 @@ class OpenAiServiceUnavailable(ServiceException):
     def __init__(self):
         super().__init__("OpenAI Service not available. Please try again later", 503 )
 
+class InvalidInput(ServiceException):  
+    def __init__(self):
+        super().__init__("The input is not related to chemicals or GPT does not have knowledge of given chemicals", 400 )
+
+class InvalidRequest(ServiceException):  
+    def __init__(self):
+        super().__init__("IMSDS_input has to be in the form of list", 400 )
+
 class AsyncResultException(Exception):
     """
     Raised from a result in the asynchronous flow
