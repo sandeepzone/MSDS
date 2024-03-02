@@ -59,7 +59,10 @@ class GptService:
                                 )
                 gpt_response = response.choices[0].message.content
                 json_object = json.loads(gpt_response)
-                json_object = json.dumps({"Chemicals":json_object}, ensure_ascii=False, indent=4)
+                if len(validated_chemical_list) > 1:
+                    json_object = json.dumps({"Chemicals":json_object}, ensure_ascii=False, indent=4)
+                else:
+                    json_object = json.dumps({"Chemicals":{f"{validated_chemical_list[0]}":json_object}}, ensure_ascii=False, indent=4)
                 return json_object, validated_chemical_list
             else:
                 raise InvalidInput()

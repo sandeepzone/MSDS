@@ -10,7 +10,7 @@ MODEL_TEMP: 0.001
 MAP_DICT:
   0: "Basic Information"
   1: "Physical Properties"
-  2: "Hazard related informat,ion"
+  2: "Hazard related information"
   3: "Personal protection"
   4: "Handling information"
   5: "Solubility"
@@ -22,4 +22,3 @@ MAP_DICT:
   11: "CAS Number"
   12: "UN number"
   13: "Transport hazard"
-
