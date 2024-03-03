@@ -22,20 +22,23 @@ class GptService:
         self.user_input_list = user_input_list
 
     def input_validator(self):
-
-        response = self.client.chat.completions.create(
-                    model=self.config.MODEL_NAME,
-                    seed=self.config.OPENAI_SEED,
-                    temperature=self.config.MODEL_TEMP,
-                    messages=[
-                        {"role": "system", "content": MSDS_INPUT_VALIDATION_PROMPT},
-                        {"role": "user", "content": f"""The input list is as follows : 
-                         {self.user_input_list}"""}
-                        ]
-                    )
-        res = response.choices[0].message.content
-        validated_chemical_list = [item.strip("'\"") for item in res.strip("[]").split(", ")]
-        return validated_chemical_list
+        
+        try:
+            response = self.client.chat.completions.create(
+                        model=self.config.MODEL_NAME,
+                        seed=self.config.OPENAI_SEED,
+                        temperature=self.config.MODEL_TEMP,
+                        messages=[
+                            {"role": "system", "content": MSDS_INPUT_VALIDATION_PROMPT},
+                            {"role": "user", "content": f"""The input list is as follows : 
+                            {self.user_input_list}"""}
+                            ]
+                        )
+            res = response.choices[0].message.content
+            validated_chemical_list = [item.strip("'\"") for item in res.strip("[]").split(", ")]
+            return validated_chemical_list
+        except AuthenticationError:
+            raise OpenAiAuthenticationError()
 
     def get_json_from_gpt(self):
         
