@@ -1,0 +1,383 @@
+{
+	"info": {
+		"_postman_id": "0c6842b8-259d-4a1f-962b-e4e0d86dba98",
+		"name": "MSDS-API",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+		"_exporter_id": "32466133"
+	},
+	"item": [
+		{
+			"name": "HealthCheck",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"// Check if the response status is 200 OK",
+							"pm.test(\"Status code is 200\", function () {",
+							"    pm.response.to.have.status(200);",
+							"});",
+							"",
+							"// Check if the response body contains the expected JSON content",
+							"pm.test(\"Response body has expected content\", function () {",
+							"    pm.response.to.have.jsonBody({",
+							"        status: \"Healthy\"",
+							"    });",
+							"});",
+							""
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"protocolProfileBehavior": {
+				"disableBodyPruning": true
+			},
+			"request": {
+				"method": "GET",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "http://{{host_name}}/MSDS/healthCheck",
+					"protocol": "http",
+					"host": [
+						"{{host_name}}"
+					],
+					"path": [
+						"MSDS",
+						"healthCheck"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "ValidRequestSingleChemicalInput",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"pm.test(\"Response has expected status, status_detail, and code\", function () {",
+							"    var jsonData = pm.response.json();",
+							"    ",
+							"    pm.expect(jsonData.status).to.eql(\"SUCCESS\");",
+							"    pm.expect(jsonData.status_detail).to.eql(\"SUCCESS\");",
+							"    pm.expect(jsonData.code).to.eql(\"200\");",
+							"});",
+							""
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n    \"MSDS_input\":[\"Benzene\"]\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "http://{{host_name}}/MSDS/generate",
+					"protocol": "http",
+					"host": [
+						"{{host_name}}"
+					],
+					"path": [
+						"MSDS",
+						"generate"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "ValidRequestSingleCASNumberInput",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"pm.test(\"Response has expected status, status_detail, and code\", function () {",
+							"    var jsonData = pm.response.json();",
+							"    ",
+							"    pm.expect(jsonData.status).to.eql(\"SUCCESS\");",
+							"    pm.expect(jsonData.status_detail).to.eql(\"SUCCESS\");",
+							"    pm.expect(jsonData.code).to.eql(\"200\");",
+							"});",
+							""
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n    \"MSDS_input\":[\"110-91-8\"]\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "http://{{host_name}}/MSDS/generate",
+					"protocol": "http",
+					"host": [
+						"{{host_name}}"
+					],
+					"path": [
+						"MSDS",
+						"generate"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "ValidRequestMultipleCASNumberInput",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"pm.test(\"Response has expected status, status_detail, and code\", function () {",
+							"    var jsonData = pm.response.json();",
+							"    ",
+							"    pm.expect(jsonData.status).to.eql(\"SUCCESS\");",
+							"    pm.expect(jsonData.status_detail).to.eql(\"SUCCESS\");",
+							"    pm.expect(jsonData.code).to.eql(\"200\");",
+							"});",
+							""
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n    \"MSDS_input\":[\"7732-18-5\", \"74-82-8\" ]\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "http://{{host_name}}/MSDS/generate",
+					"protocol": "http",
+					"host": [
+						"{{host_name}}"
+					],
+					"path": [
+						"MSDS",
+						"generate"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "ValidRequestMultipleChemicalsInputs",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"pm.test(\"Response has expected status, status_detail, and code\", function () {",
+							"    var jsonData = pm.response.json();",
+							"    ",
+							"    pm.expect(jsonData.status).to.eql(\"SUCCESS\");",
+							"    pm.expect(jsonData.status_detail).to.eql(\"SUCCESS\");",
+							"    pm.expect(jsonData.code).to.eql(\"200\");",
+							"});",
+							""
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n    \"MSDS_input\":[\"Methane\", \"Sodium Chloride\" ]\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "http://{{host_name}}/MSDS/generate",
+					"protocol": "http",
+					"host": [
+						"{{host_name}}"
+					],
+					"path": [
+						"MSDS",
+						"generate"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "ValidRequestMixedInputs",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"pm.test(\"Response has expected status, status_detail, and code\", function () {",
+							"    var jsonData = pm.response.json();",
+							"    ",
+							"    pm.expect(jsonData.status).to.eql(\"SUCCESS\");",
+							"    pm.expect(jsonData.status_detail).to.eql(\"SUCCESS\");",
+							"    pm.expect(jsonData.code).to.eql(\"200\");",
+							"});",
+							""
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n    \"MSDS_input\": [\n        \"Methane\",\n        \"124-38-9\"\n    ]\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "http://{{host_name}}/MSDS/generate",
+					"protocol": "http",
+					"host": [
+						"{{host_name}}"
+					],
+					"path": [
+						"MSDS",
+						"generate"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "InvalidChemicalInput",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"pm.test(\"Response indicates failure with status FAILED and code 400\", function () {",
+							"    var jsonData = pm.response.json();",
+							"    ",
+							"    pm.expect(jsonData.status).to.eql(\"FAILED\");",
+							"    pm.expect(jsonData.code).to.eql(\"400\");",
+							"});",
+							""
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n    \"MSDS_input\":[\"Bus\" ]\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "http://{{host_name}}/MSDS/generate",
+					"protocol": "http",
+					"host": [
+						"{{host_name}}"
+					],
+					"path": [
+						"MSDS",
+						"generate"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "InvalidRequestInputType",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"pm.test(\"Response indicates failure with status FAILED and code 400\", function () {",
+							"    var jsonData = pm.response.json();",
+							"    ",
+							"    pm.expect(jsonData.status).to.eql(\"FAILED\");",
+							"    pm.expect(jsonData.code).to.eql(\"400\");",
+							"});",
+							""
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n    \"MSDS_input\":\"H2O\"\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "http://{{host_name}}/MSDS/generate",
+					"protocol": "http",
+					"host": [
+						"{{host_name}}"
+					],
+					"path": [
+						"MSDS",
+						"generate"
+					]
+				}
+			},
+			"response": []
+		}
+	]
+}
