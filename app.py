@@ -1,5 +1,7 @@
 import warnings
 warnings.filterwarnings("ignore", category=DeprecationWarning)
+from fastapi import FastAPI, HTTPException, status
+from pydantic import BaseModel, ValidationError
 
 from fastapi import FastAPI
 from starlette.exceptions import HTTPException as StarletteHTTPException
@@ -35,16 +37,22 @@ def check_health():
     return JSONResponse(content={'status': 'Healthy'}, status_code=200)
 
 @app.post('/MSDS/generate', status_code=200)
-def generate_summary(request: MSDSRequest):
+async def generate_summary(request: Request):
     """
     generate_summary method returns the MSDS sheet for the given input list
     ...
     """
     
-    try:
-        input_list = request.MSDS_input
-        logging.info("The input received for MSDS summary generation is : {}".format(input_list))
+    try: 
+        # Validate the request body against the MSDSRequest model
+        try:
+            request_body = await request.json()
+            msds_request = MSDSRequest(**request_body )
+        except ValidationError as e:
+            # If validation fails, raise an HTTPException
+            raise InvalidRequest()
         
+        input_list = msds_request.MSDS_input 
         gpt_service = GptService(config=config, user_input_list=input_list) 
         gpt_service.generate_document()
         result = MSDSResponse()

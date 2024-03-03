@@ -42,7 +42,7 @@ class InvalidInput(ServiceException):
 
 class InvalidRequest(ServiceException):  
     def __init__(self):
-        super().__init__("IMSDS_input has to be in the form of list", 400 )
+        super().__init__("MSDS_input has to be in the form of list", 400 )
 
 class AsyncResultException(Exception):
     """
